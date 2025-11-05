@@ -1,29 +1,35 @@
-# routes/diabetes_routes.py
-from flask import Blueprint, render_template, request
-import tensorflow as tf
+from flask import Blueprint, request, jsonify
 import joblib
+import numpy as np
+from tensorflow.keras.models import load_model
 import pandas as pd
-from utils.mappings import diabetes_mappings
-from utils.preprocess import prepare_input
 
-diabetes_bp = Blueprint('diabetes_bp', __name__)
+diabetes_bp = Blueprint("diabetes_bp", __name__)
 
-# Load models, scalers, and dataset
-diabetes_model = tf.keras.models.load_model("models/diabetes_model.keras")
-diabetes_scaler = joblib.load("scaler/diabetes_scaler.pkl")
-diabetes_df = pd.read_csv("data/diabetes.csv")
-diabetes_columns = diabetes_df.drop(columns=["Outcome"]).columns.tolist()
-diabetes_means = diabetes_df.drop(columns=["Outcome"]).mean().to_dict()
+# Load model and scaler
+model = load_model("./models/diabetes_model.keras")
+scaler = joblib.load("./scaler/diabetes_scaler.pkl")
 
-@diabetes_bp.route('/', methods=['GET', 'POST'])
-def diabetes_form():
-    result = None
-    probability = None
-    if request.method == 'POST':
-        data = dict(request.form)
-        X_scaled = prepare_input(data, diabetes_columns, diabetes_mappings, diabetes_means, diabetes_scaler)
-        prob = float(diabetes_model.predict(X_scaled)[0][0])
-        result = "Positive" if prob >= 0.5 else "Negative"
-        probability = round(prob, 3)
+@diabetes_bp.route("/diabetes", methods=["POST"])
+def predict_diabetes():
+    try:
+        data = request.get_json()
+        print("Received data:", data)
 
-    return render_template("diabetes_form.html", result=result, probability=probability)
+        if not data:
+            return jsonify({"error": "No input received"}), 400
+
+        # Convert input to DataFrame
+        df = pd.DataFrame([data])
+        expected_cols = scaler.feature_names_in_
+        df = df.reindex(columns=expected_cols, fill_value=0)
+        X = scaler.transform(df)
+
+        prob = float(model.predict(X)[0][0])
+        pred = "High Risk" if prob >= 0.5 else "Low Risk"
+
+        return jsonify({"probability": prob, "prediction": pred}), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
