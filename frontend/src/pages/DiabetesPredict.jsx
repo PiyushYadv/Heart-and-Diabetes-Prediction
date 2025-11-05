@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { adviceFor } from "../utils/advice";
 import { predict } from "../api/api";
 import { RiskMeter } from "../components/RiskMeter";
+import { LoadingAnimation } from "../components/animations/LoadingAnimation";
+import { SuccessAnimation } from "../components/animations/SuccessAnimation";
+import { WarningAnimation } from "../components/animations/WarningAnimation";
 
 const DIAB_FIELDS = [
   {
@@ -23,29 +27,6 @@ const DIAB_FIELDS = [
   { name: "Age", label: "Age (years)", type: "number", required: true },
 ];
 
-// 🩺 Risk-based advice logic
-const adviceFor = (pct) => {
-  if (pct >= 90)
-    return {
-      level: "danger",
-      text: "⚠️ Very high likelihood. Please visit a healthcare professional immediately.",
-    };
-  if (pct >= 70)
-    return {
-      level: "warn",
-      text: "⚠️ High risk. Schedule a check-up with your doctor soon.",
-    };
-  if (pct >= 40)
-    return {
-      level: "caution",
-      text: "⚠️ Moderate risk. Watch your diet and exercise regularly.",
-    };
-  return {
-    level: "ok",
-    text: "✅ Low risk. Maintain healthy habits and regular blood sugar tests.",
-  };
-};
-
 export function DiabetesPredict() {
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(false);
@@ -61,7 +42,7 @@ export function DiabetesPredict() {
       const data = await predict("diabetes", form);
       console.log(data);
       const pct = Math.round((data.probability ?? 0) * 100);
-      const advice = adviceFor(pct);
+      const advice = adviceFor("diabetes", pct);
       setResult({ pct, prediction: data.prediction, advice });
     } catch (err) {
       alert(err?.response?.data?.error || err.message);
@@ -93,40 +74,35 @@ export function DiabetesPredict() {
             />
           </label>
         ))}
-        <div className="md:col-span-2 mt-2">
-          <button
-            disabled={loading}
-            className="btn"
-            style={{ background: "#16a085" }}
-          >
+        <div className="md:col-span-2 mt-2 text-center">
+          <button disabled={loading} className="btn bg-amber-400">
             {loading ? "Predicting..." : "Predict"}
           </button>
         </div>
       </form>
 
-      {result && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 grid md:grid-cols-3 gap-6"
-        >
-          <div className="card flex items-center justify-center">
-            <RiskMeter percent={result.pct} color="#16a085" />
-          </div>
+      {/* --- Result Section --- */}
+      <div className="mt-6 flex flex-col items-center">
+        {loading && <LoadingAnimation />}
 
-          <div className="card md:col-span-2">
-            <div className="text-sm text-slate-500">System Assessment</div>
-            <div className="text-xl font-semibold mt-1">
-              {result.prediction} ({result.pct}%)
-            </div>
-            <p className="mt-2 text-slate-700">{result.advice.text}</p>
-            <p className="mt-3 text-xs text-slate-500">
-              Note: This tool is for informational purposes only, not a medical
-              diagnosis.
-            </p>
-          </div>
-        </motion.div>
-      )}
+        {!loading && result && (
+          <>
+            <RiskMeter percent={result.pct} />
+            {result.pct < 40 && <SuccessAnimation />}
+            {result.pct >= 70 && <WarningAnimation />}
+
+            <motion.p
+              key={result.advice.tone}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className={`mt-4 text-center font-medium ${result.advice.color}`}
+            >
+              {result.advice.message}
+            </motion.p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
