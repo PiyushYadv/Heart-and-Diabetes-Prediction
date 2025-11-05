@@ -5,27 +5,96 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Diabetes Prediction</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 40px;
+      background-color: #f4fcf7;
+    }
+
+    h2 {
+      color: #16a085;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
+    input,
+    select {
+      width: 280px;
+      padding: 6px;
+      margin-top: 4px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background: #16a085;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #13856e;
+    }
+
+    small {
+      color: #666;
+      font-size: 0.9em;
+    }
+  </style>
+
 </head>
 
-<body>
-  <h2>💉 Diabetes Prediction</h2>
-  <form method="POST">
-    {% for col in columns %}
-    <label for="{{ col }}">
-      {{ col }}:</label>
-    <input type="number" step="any" name="{{ col }}" placeholder="{{ col }}" required><br><br>
-    {% endfor %}
-    <button type="submit">Predict</button>
-  </form>
+<h2>💉 Diabetes Risk Prediction</h2>
+<form method="POST">
 
-  {% if result %}
-  <h3>Prediction:
-    {{ result }}
-  </h3>
-  <p>Probability:
-    {{ probability }}
-  </p>
-  {% endif %}
+  <label>Number of Pregnancies:</label>
+  <input type="number" name="Pregnancies" min="0" step="1" placeholder="e.g., 2" required>
+
+  <label>Glucose Level (mg/dL):</label>
+  <input type="number" name="Glucose" min="0" step="0.1" placeholder="e.g., 120" required>
+
+  <label>Blood Pressure (mm Hg):</label>
+  <input type="number" name="BloodPressure" min="0" step="0.1" placeholder="optional — auto-fill if blank">
+
+  <label>Skin Thickness (mm):</label>
+  <input type="number" name="SkinThickness" min="0" step="0.1" placeholder="optional — auto-fill if blank">
+
+  <label>Insulin Level (μU/ml):</label>
+  <input type="number" name="Insulin" min="0" step="0.1" placeholder="optional — auto-fill if blank">
+
+  <label>BMI (Body Mass Index):</label>
+  <input type="number" name="BMI" min="0" step="0.1" placeholder="e.g., 33.6" required>
+
+  <label for="FamilyHistory">Family History of Diabetes:</label>
+  <select id="FamilyHistory" name="FamilyHistory">
+    <option>Yes</option>
+    <option>No</option>
+  </select>
+
+  <label>Diabetes Pedigree Function:</label>
+  <input type="number" name="DiabetesPedigreeFunction" step="0.001" placeholder="optional — auto-fill if blank">
+
+  <label>Age (years):</label>
+  <input type="number" name="Age" min="10" step="1" placeholder="e.g., 45" required>
+
+  <button type="submit">Predict</button>
+</form>
+
+{% if result %}
+<h3>Prediction:
+  {{ result }}
+</h3>
+<p>Probability:
+  {{ probability }}
+</p>
+{% endif %}
 </body>
 
 </html>
