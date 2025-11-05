@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diabetes Prediction</title>
+</head>
+
+<body>
+  <h2>💉 Diabetes Prediction</h2>
+  <form method="POST">
+    {% for col in columns %}
+    <label for="{{ col }}">
+      {{ col }}:</label>
+    <input type="number" step="any" name="{{ col }}" placeholder="{{ col }}" required><br><br>
+    {% endfor %}
+    <button type="submit">Predict</button>
+  </form>
+
+  {% if result %}
+  <h3>Prediction:
+    {{ result }}
+  </h3>
+  <p>Probability:
+    {{ probability }}
+  </p>
+  {% endif %}
+</body>
+
+</html>
