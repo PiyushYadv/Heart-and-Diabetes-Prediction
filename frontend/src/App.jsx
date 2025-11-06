@@ -34,9 +34,6 @@ export default function App() {
           </div>
         </div>
       </nav>
-      <div className="m-auto bg-black text-gray-50 text-xs px-1 py-1 text-center">
-        <p>By- Prajjwal Bhardwaj , Piyush Yadav , Piyush Raj</p>
-      </div>
 
       {/* Route Setup */}
       <Routes>
@@ -44,10 +41,6 @@ export default function App() {
         <Route path="/heart" element={<HeartPredict />} />
         <Route path="/diabetes" element={<DiabetesPredict />} />
       </Routes>
-
-      <footer className="mt-10 bg-black py-6 border-t border-slate-200 text-center text-sm text-slate-300">
-        &copy; 2025 HealthPredict. All rights reserved.
-      </footer>
     </div>
   );
 }

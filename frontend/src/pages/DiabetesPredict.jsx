@@ -13,18 +13,53 @@ const DIAB_FIELDS = [
     label: "Number of Pregnancies",
     type: "number",
     required: true,
+    placeholder: "0-2",
   },
-  { name: "Glucose", label: "Glucose (mg/dL)", type: "number", required: true },
-  { name: "BloodPressure", label: "Blood Pressure (mm Hg)", type: "number" },
-  { name: "SkinThickness", label: "Skin Thickness (mm)", type: "number" },
-  { name: "Insulin", label: "Insulin (µU/mL)", type: "number" },
-  { name: "BMI", label: "BMI", type: "number", required: true },
+  {
+    name: "Glucose",
+    label: "Glucose (mg/dL)",
+    type: "number",
+    required: true,
+    placeholder: "70-140 mg/dL",
+  },
+  {
+    name: "BloodPressure",
+    label: "Blood Pressure (mm Hg)",
+    type: "number",
+    placeholder: "70-80 mm Hg",
+  },
+  {
+    name: "SkinThickness",
+    label: "Skin Thickness (mm)",
+    type: "number",
+    placeholder: "10-20 mm",
+  },
+  {
+    name: "Insulin",
+    label: "Insulin (µU/mL)",
+    type: "number",
+    placeholder: "16-166 µU/mL",
+  },
+  {
+    name: "BMI",
+    label: "BMI",
+    type: "number",
+    required: true,
+    placeholder: "18.5-24.9",
+  },
   {
     name: "DiabetesPedigreeFunction",
     label: "Diabetes Pedigree Function",
     type: "number",
+    placeholder: "<0.5",
   },
-  { name: "Age", label: "Age (years)", type: "number", required: true },
+  {
+    name: "Age",
+    label: "Age (years)",
+    type: "number",
+    required: true,
+    placeholder: "",
+  },
 ];
 
 export function DiabetesPredict() {
@@ -70,7 +105,7 @@ export function DiabetesPredict() {
               required={!!f.required}
               onChange={onChange}
               className="w-full border rounded-lg px-3 py-2"
-              placeholder={!f.required ? "Optional — auto-fill if blank" : ""}
+              placeholder={f.placeholder}
             />
           </label>
         ))}

@@ -8,7 +8,13 @@ import { SuccessAnimation } from "../components/animations/SuccessAnimation";
 import { WarningAnimation } from "../components/animations/WarningAnimation";
 
 const HEART_FIELDS = [
-  { name: "age", label: "Age (years)", type: "number", required: true },
+  {
+    name: "age",
+    label: "Age (years)",
+    type: "number",
+    required: true,
+    placeholder: "",
+  },
   {
     name: "sex",
     label: "Sex",
@@ -33,12 +39,14 @@ const HEART_FIELDS = [
     label: "Resting BP (mm Hg)",
     type: "number",
     required: true,
+    placeholder: "90-120 mm Hg",
   },
   {
     name: "chol",
     label: "Cholesterol (mg/dL)",
     type: "number",
     required: true,
+    placeholder: "125-200 mg/dL",
   },
   {
     name: "fbs",
@@ -56,21 +64,36 @@ const HEART_FIELDS = [
       "Left Ventricular Hypertrophy",
     ],
   },
-  { name: "thalach", label: "Max Heart Rate Achieved", type: "number" },
+  {
+    name: "thalach",
+    label: "Max Heart Rate Achieved",
+    type: "number",
+    placeholder: "120-170 bpm",
+  },
   {
     name: "exang",
     label: "Exercise Induced Angina",
     type: "select",
     options: ["Yes", "No"],
   },
-  { name: "oldpeak", label: "ST Depression", type: "number" },
+  {
+    name: "oldpeak",
+    label: "ST Depression",
+    type: "number",
+    placeholder: "0-1.0",
+  },
   {
     name: "slope",
     label: "Slope of Peak Exercise ST Segment",
     type: "select",
     options: ["Upsloping", "Flat", "Downsloping"],
   },
-  { name: "ca", label: "Major Vessels Colored (0–3)", type: "number" },
+  {
+    name: "ca",
+    label: "Major Vessels Colored (0–3)",
+    type: "number",
+    placeholder: "0",
+  },
   {
     name: "thal",
     label: "Thalassemia Type",
@@ -133,7 +156,7 @@ export function HeartPredict() {
                   "padding-right": "2.5em",
                 }}
               >
-                <option value="">Select...</option>
+                <option value="">Select</option>
                 {f.options.map((opt) => (
                   <option key={opt} value={opt}>
                     {opt}
@@ -148,7 +171,7 @@ export function HeartPredict() {
                 required={!!f.required}
                 onChange={onChange}
                 className="w-full border rounded-lg px-3 py-2"
-                placeholder={!f.required ? "Optional — auto-fill if blank" : ""}
+                placeholder={f.placeholder}
               />
             )}
           </label>

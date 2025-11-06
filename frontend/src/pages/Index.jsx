@@ -166,7 +166,7 @@ export function Index() {
       {/* Combined Risk Factors */}
       <div className="card">
         <h3 className="text-lg font-semibold mb-3">Common Risk Factors</h3>
-        <div className="h-72">
+        <div className="h-108">
           <ResponsiveContainer>
             <BarChart data={riskFactors}>
               <CartesianGrid strokeDasharray="3 3" />
