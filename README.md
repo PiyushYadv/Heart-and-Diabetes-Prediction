@@ -58,7 +58,7 @@ It integrates:
 
 ### 🔧 1. Clone the repository
 ```bash
-git clone https://github.com/<your-username>/heart-diabetes-detection.git
+git clone https://github.com/PiyushYadv/heart-diabetes-detection.git
 cd heart-diabetes-detection
 ```
 
